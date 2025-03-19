@@ -1,0 +1,274 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: system-ui;
+    font-weight: 500;
+    color: #000;
+}
+
+
+.all{
+    display: flex;
+    height: 100vh;
+    background-color: rgb(31, 31, 31);
+    overflow: hidden;
+}
+.nav{
+    z-index: 10;
+    background-color: rgb(31, 31, 31);
+    width: 20vw;
+    padding: 2vw auto;
+    overflow: hidden;
+}
+.nav h2{
+    text-align: center;
+    margin: 2vw auto;
+    color: whitesmoke;
+    font-family: "Lora";
+}
+.notes h3,.task h3{
+    color: whitesmoke;
+    font-family: "Lora";
+}
+h1{
+    font-weight: 700;
+    font-family: "Lora";
+    padding: 40px;
+    height: 70vh;
+    line-height: 70vh;
+}
+.nav ul{
+    margin: auto;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1vw;
+}
+.nav ul li{
+    background-color: whitesmoke;
+    border: 2px solid whitesmoke;
+    padding: 30px;
+    width: 65%;
+    border-radius: 15px;
+    transition: linear .2s;
+    
+
+}
+.nav ul li:hover{
+    background-color: rgb(188, 188, 188);
+}
+.nav ul li:active{
+    background-color: rgb(188, 188, 188);
+}
+.navigator{
+    text-decoration: none;
+    color: black;
+    font-family: system-ui;
+    
+}
+.top{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: rgb(31, 31, 31);
+    width: 100%;
+}
+.main{
+    background-color:whitesmoke;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.head h2{
+    text-align: left;
+    margin: auto 2vw;
+    color: whitesmoke;
+    font-weight: 200;
+    font-family: "Lora";
+    
+}
+.notes-task-area{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: whitesmoke;
+    height: 70vh;
+    width: 100%;
+    padding: 40px;
+    overflow: hidden;
+    overflow-y: auto;
+}
+   
+.notes,.task{
+    display: flex;
+    height: auto;
+    width: 80%;
+    flex-direction: column;
+    background-color: rgb(31, 31, 31);
+    border-radius: 15px;
+    margin:1vmax auto;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+.notes-task-name,.search,.notes-task-place{
+    padding: 0 2vw;
+    background-color: transparent;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    height: 40px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 10px;
+    color: whitesmoke;
+}
+.notes-task-place{
+    max-width: 90%;
+    min-width: 90%;
+    min-height: 80px;
+    overflow: hidden;
+    padding: 2vw;
+}
+i{
+    font-size: 25px;
+    cursor: pointer;
+    color: whitesmoke;
+    padding: 0 5px;
+}
+.save-btn{
+    font-size: 15px;
+    background-color: transparent;
+    border: none;
+}
+.save-btn h4{
+    color: whitesmoke;
+}
+.save-btn h4:active{
+    color: rgb(188, 188, 188);
+}
+i:active{
+    color: rgb(188, 188, 188);
+}
+.icons{
+    text-align: right;
+    color: whitesmoke;
+}
+.bottom{
+    background-color: rgb(31, 31, 31);
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    color: whitesmoke;
+    font-family: "Lora";
+    overflow: hidden;
+}
+.task-add{
+    position: absolute;
+    bottom: 20%;
+    right: 4%;
+    font-size: 60px;
+    color: black;
+}
+/* From Uiverse.io by SelfMadeSystem */ 
+
+.container {
+    cursor: pointer;
+  }
+  
+  .container input {
+    display: none;
+  }
+  
+  .container svg {
+    overflow: visible;
+  }
+  
+  .path {
+    fill: none;
+    stroke: white;
+    stroke-width: 6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke-dasharray 0.5s ease, stroke-dashoffset 0.5s ease;
+    stroke-dasharray: 241 9999999;
+    stroke-dashoffset: 0;
+  }
+  
+  .container input:checked ~ svg .path {
+    stroke-dasharray: 70.5096664428711 9999999;
+    stroke-dashoffset: -262.2723388671875;
+  }
+
+.task-area{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.menu-btn{
+    display: none;
+}
+.close-btn{
+    display: none;
+}
+.search{
+    border: 2px solid whitesmoke;
+}
+input:focus{
+    outline: none;
+    border: 2px solid whitesmoke;
+}
+textarea:focus{
+    outline: none;
+    border: 2px solid whitesmoke;
+}
+
+
+
+.strong{
+    text-transform: capitalize;
+}
+.none{
+    display: none;
+}
+@media (max-width:1150px) {
+    .all{
+        flex-direction: column;
+    }
+    .nav{
+        top: -100%;
+        position: absolute;
+        overflow: visible;
+        width: 100%;
+        padding-bottom: 10px;
+    }
+    .nav ul{
+        align-items: center;
+        justify-content: space-evenly;
+    }
+    .nav ul li{        
+    }
+    .nav h2{
+        display: none;
+    }
+    .menu-btn{
+        display: block;
+    }
+    i{
+        font-size: 18px;
+    }
+    .close-btn{
+        display: block;
+        text-align: center;
+        font-size: 25px;
+        margin: 25px auto;
+    }
+    h1{
+        font-size: 25px;
+    }
+}
+
