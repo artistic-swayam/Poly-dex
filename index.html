@@ -19,22 +19,25 @@
 	<div class="nav">
 		<h2>Navigation</h2>
 		<ul>
-			<li><a href="" class="navigator">Tasks</a></li>
-			<li><a href="" class="navigator">Notes</a></li>
-			<li><a href="" class="navigator">Socials</a></li>
-			<li><a href="" class="navigator">About</a></li>
+			<li id="notes_bt" class="navigator"><a href="#notes_all">Notes</a></li>
+			<li id="tasks_bt" class="navigator"><a href="#tasks_all">Tasks</a></li>
+			<li id="journal_bt" class="navigator"><a href="#journal_all">Journal</a></li>
+			<li id="account_bt" class="navigator"><a href="#account_all">Account</a></li>
 		</ul>
 		<i class="ri-close-line close-btn"></i>
 	</div>
 	<div class="main">
 		<div class="top">
 			<div class="head">
-				<h2>ProductivityHub.co</h2>
+				<h2>Polymode.co</h2>
 			</div>
 			<i class="ri-menu-2-line menu-btn"></i>
 			
 		</div>
-		<div class="notes-task-area">
+
+		<!-- notes page -->
+		<div class="notes-task-area" id="notes_all">
+			<h3></h3>
 			<h1>"Write what you seek!"</h1>
 			<div class="notes none">
 				<h3 class="notes-preview none">Name</h3>
@@ -67,13 +70,98 @@
 			</div>
 			
 
-			<i class="ri-add-circle-fill task-add"></i>
+			
 
 		</div>
+
+		<!-- tasks page -->
+	    <div class="notes-task-area none" id="tasks_all">
+		<h3></h3>
+		<h1>"Write what you seek!"</h1>
+
+		<div class="task none">
+			<h3 class="task-preview none">Name</h3>
+			<div class="task-area">
+				<!-- From Uiverse.io by SelfMadeSystem '-.'-++9+r98rp'--> 
+				<label class="container">
+					<input type="checkbox" class="check">
+					<svg viewBox="0 0 64 64" height="1em" width="1em">
+					  <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path"></path>
+					</svg>
+				</label>
+				<input type="text" class="notes-task-name" placeholder="Add task"></input>
+			</div>
+			<div class="icons">
+
+				<i class="ri-delete-bin-6-line delete-btn"></i>
+				<button class="save-btn"><h4>save</h4></button>
+			</div>
+		</div>
+		
+
+		
+
+	
+	<div class="bottom">
+		<input type="text" class="search" placeholder="search for notes"><i class="ri-search-2-line"></i></input>
+	</div>
+	
+	    </div>
+
+		<!-- journal page -->
+		<div class="notes-task-area none" id="journal_all">
+			<h3></h3>
+			<h1>"Write what you seek!"</h1>
+			<div class="notes none">
+				<h3 class="notes-preview none">Name</h3>
+				<input type="text" class="notes-task-name" placeholder="Add name"></input>
+				<textarea name="" id="" class="notes-task-place" placeholder="Type here..."></textarea>
+				<div class="icons">
+					<i class="ri-arrow-down-wide-line ex-btn none"></i>
+					<i class="ri-delete-bin-6-line delete-btn"></i>
+					<button class="save-btn"><h4>save</h4></button>
+				</div>
+			</div>
+
+			<div class="task none">
+				<h3 class="task-preview none">Name</h3>
+				<div class="task-area">
+					<!-- From Uiverse.io by SelfMadeSystem --> 
+					<label class="container">
+						<input type="checkbox" class="check">
+						<svg viewBox="0 0 64 64" height="1em" width="1em">
+						  <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path"></path>
+						</svg>
+					</label>
+					<input type="text" class="notes-task-name" placeholder="Add task"></input>
+				</div>
+				<div class="icons">
+
+					<i class="ri-delete-bin-6-line delete-btn"></i>
+					<button class="save-btn"><h4>save</h4></button>
+				</div>
+			</div>
+			
+
+			
+
+		</div>
+
+		<!-- account page -->
+		<div class="notes-task-area none" id="account_all">
+		</div>
+
 		<div class="bottom">
 			<input type="text" class="search" placeholder="search for notes"><i class="ri-search-2-line"></i></input>
 		</div>
+		<i class="ri-add-circle-fill task-add"></i>
+		
 	</div>
+
+
+	</div>
+
+	<!-- p9uu979 -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script src="script.js"></script>
 </div>
@@ -81,3 +169,4 @@
 </html>
 
 
+<!-- ee8wr+uppepp++7979u8u99pwrr8pe9rr+ui+wr89+9+ p-->
