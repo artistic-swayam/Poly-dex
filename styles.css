@@ -4,8 +4,14 @@
     font-family: system-ui;
     font-weight: 500;
     color: #000;
+    box-sizing: border-box;
 }
-
+@font-face {
+    font-family: 'SF Pro Display';
+    src: url('SFPRODISPLAYBOLD.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
 
 .all{
     display: flex;
@@ -13,6 +19,7 @@
     background-color: rgb(31, 31, 31);
     overflow: hidden;
 }
+
 .nav{
     z-index: 10;
     background-color: rgb(31, 31, 31);
@@ -26,15 +33,13 @@
     color: whitesmoke;
     font-family: "Lora";
 }
-.notes h3,.task h3{
+.notes-preview{
     color: whitesmoke;
     font-family: "Lora";
 }
 h1{
     font-weight: 700;
     font-family: "Lora";
-    padding: 40px;
-    height: 70vh;
     line-height: 70vh;
 }
 .nav ul{
@@ -100,15 +105,15 @@ h1{
     background-color: whitesmoke;
     height: 70vh;
     width: 100%;
-    padding: 40px;
+    padding: 20px;
     overflow: hidden;
     overflow-y: auto;
 }
    
-.notes,.task{
+.notes,.task,.journal{
     display: flex;
     height: auto;
-    width: 80%;
+    width: 100%;
     flex-direction: column;
     background-color: rgb(31, 31, 31);
     border-radius: 15px;
@@ -126,6 +131,10 @@ h1{
     border-radius: 10px;
     color: whitesmoke;
 }
+.notes-task-name{
+    width: 100%;
+}
+
 .notes-task-place{
     max-width: 90%;
     min-width: 90%;
@@ -207,6 +216,7 @@ i:active{
     display: flex;
     align-items: center;
     gap: 10px;
+    width: auto;
 }
 
 .menu-btn{
@@ -233,7 +243,16 @@ textarea:focus{
     text-transform: capitalize;
 }
 .none{
-    display: none;
+    display: none !important;
+}
+.show{
+    display: flex;
+}
+h3,li,p{
+    font-family: 'SF Pro Display';
+}
+*{
+    font-family: 'SF Pro Display';
 }
 @media (max-width:1150px) {
     .all{
@@ -260,6 +279,9 @@ textarea:focus{
     }
     i{
         font-size: 18px;
+    }
+    .notes-task-area{
+        padding: 10px;
     }
     .close-btn{
         display: block;
