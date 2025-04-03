@@ -17,7 +17,7 @@
 	<div class="all">
 		
 	<div class="nav">
-		<h2>Navigation</h2>
+		<h2>Menu</h2>
 		<ul>
 			<li id="notes_bt" class="navigator"><a href="#notes_all">Notes</a></li>
 			<li id="tasks_bt" class="navigator"><a href="#tasks_all">Tasks</a></li>
@@ -30,12 +30,14 @@
 	<div class="main">
 		<div class="top">
 			<div class="head">
-				<h2>Polymode.co</h2>
+				<h2>Polydex</h2>
 			</div>
 			<i class="ri-menu-2-line menu-btn"></i>
 			
 		</div>
 		<h1>"Write what you seek!"</h1>
+		<h4>click on menu bar and start writing</h4>
+		
 		<!-- notes page -->
 		<div class="notes-task-area none" id="notes_all">
 			
@@ -43,8 +45,8 @@
 			
 			<div class="notes">
 				<h3 class="notes-preview none">Name</h3>
-				<input type="text" class="notes-task-name" placeholder="Add name"></input>
-				<textarea name="" id="" class="notes-task-place" placeholder="Type here..."></textarea>
+				<input type="text" class="notes-task-name noteT" placeholder="Add name"></input>
+				<textarea name="" id="" class="notes-task-place noteC" placeholder="Type here..."></textarea>
 				<div class="icons">
 					<i class="ri-arrow-down-wide-line ex-btn none"></i>
 				    <i class="ri-delete-bin-6-line delete-btn"></i>
@@ -70,7 +72,7 @@
 					</svg>
 				</label>
 				<h3 class="notes-preview none">Name</h3>
-				<input type="text" class="notes-task-name" placeholder="Add task"></input>
+				<input type="text" class="notes-task-name taskT" placeholder="Add task"></input>
 			</div>
 			<div class="icons">
 
@@ -86,8 +88,8 @@
 		<div class="notes-task-area none" id="journal_all">
 			<h3></h3>
 			<div class="journal">
-				<h3 class="notes-preview">1st jan,2025</h3>
-				<textarea name="" id="" class="notes-task-place" placeholder="Type here..."></textarea>
+				<h3 class="notes-preview journalT">1st jan,2025</h3>
+				<textarea name="" id="" class="notes-task-place journalC" placeholder="Type here..."></textarea>
 				<div class="icons">
 					<i class="ri-arrow-down-wide-line ex-btn none"></i>
 					<i class="ri-delete-bin-6-line delete-btn"></i>
@@ -101,6 +103,17 @@
 
 		<!-- account page -->
 		<div class="notes-task-area none" id="account_all">
+			<div class="account-container">
+				<div class="info">
+					<label>Name</label>
+					<p class="userName">John Doe</p>
+					<label>Email</label>
+					<p class="userEmail">johndoe@example.com</p>
+					<label>Password</label>
+					<input type="password" value="password123" readonly class="userPassword"></input><!-- ew+w+w+97opu8ru9p897+uere+w+99 -->
+				</div>
+				<button class="btn logOutBtn">Log Out</button>
+			</div>
 		</div>
 
 		<div class="bottom">
@@ -115,32 +128,14 @@
 
 	<!-- p9uu979 -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-	<script type="module">
-		// Import the functions you need from the SDKs you need
-		import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-		import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
-		// TODO: Add SDKs for Firebase products that you want to use
-		// https://firebase.google.com/docs/web/setup#available-libraries
-	  
-		// Your web app's Firebase configuration
-		// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-		const firebaseConfig = {
-		  apiKey: "AIzaSyC5FCzhbeocXFQTy3a7T8OOoT3Ya7QKy3s",
-		  authDomain: "poly-dex.firebaseapp.com",
-		  projectId: "poly-dex",
-		  storageBucket: "poly-dex.firebasestorage.app",
-		  messagingSenderId: "45959209468",
-		  appId: "1:45959209468:web:cfccfd8da291634bf19279",
-		  measurementId: "G-3D703KN4PE"
-		};
-	  
-		// Initialize Firebase
-		const app = initializeApp(firebaseConfig);
-		const analytics = getAnalytics(app);
-	  </script>
+	<script type="module" src="firebase-config.js"></script>
+		
+	
 
-
-	<script src="script.js"></script>
+	<script type="module" src="main.js"></script>
 </div>
 </body>
 </html>
+
+
+<!-- ee8wr+uppepp++7979u8u99pwrr8pe9rr+ui+wr89+9+9 p-->
