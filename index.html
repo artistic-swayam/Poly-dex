@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap');
+        @font-face {
+    font-family: 'SF Pro Display';
+    src: url('SFPRODISPLAYBOLD.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Lora', serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: whitesmoke;
+        }
+        .all{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .login-container {
+            background: rgb(31, 31, 31);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            color: whitesmoke;
+            width: 300px;
+        }
+        .input-box {
+            font-family: 'SF Pro Display';
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: whitesmoke;
+        }
+        .input-box:focus {
+            outline: none;
+            border: 2px solid whitesmoke;
+        }
+        .btn {
+            width: 100%;
+            padding: 10px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 8px;
+            background-color: whitesmoke;
+            color: rgb(31, 31, 31);
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background-color: rgb(200, 200, 200);
+        }
+        .forgot-password {
+            display: block;
+            margin-top: 10px;
+            font-family: 'SF Pro Display';/* u */
+            text-decoration: none;
+            color: whitesmoke;
+            font-size: 14px;
+        }
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+        .toggle-buttons {
+            display: flex;
+            
+            justify-content: space-between;
+            margin-bottom: 15px;
+            border-radius: 20px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px;
+        }
+        .toggle-buttons button {
+            flex: 1;
+            padding: 10px;
+            font-family: 'SF Pro Display';
+            border: none;
+            background: transparent;
+            color: whitesmoke;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            border-radius: 15px;
+        }
+        .toggle-buttons button.active {
+            background: whitesmoke;
+            color: rgb(31, 31, 31);
+        }
+        .form-heading {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .google-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 8px;
+            background-color: black;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .google-btn:hover {
+            background-color: #222;
+        }
+        .google-btn img {
+            width: 20px;
+            height: 20px;
+        }
+        h6,h4{
+            font-family: 'SF Pro Display';
+        }
+        ::placeholder {
+    color: whitesmoke; /* Darker color */
+    opacity: 1; /* Full visibility */
+}
+    </style>
+    <script>
+        function toggleForm(formType) {
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+            const loginButton = document.getElementById('login-btn');
+            const signupButton = document.getElementById('signup-btn');
+            const formHeading = document.getElementById('form-heading');
+
+            if (formType === 'login') {
+                loginForm.style.display = 'block';
+                signupForm.style.display = 'none';
+                loginButton.classList.add('active');
+                signupButton.classList.remove('active');
+                formHeading.textContent = 'Login';
+            } else {
+                loginForm.style.display = 'none';
+                signupForm.style.display = 'block';
+                signupButton.classList.add('active');
+                loginButton.classList.remove('active');
+                formHeading.textContent = 'Signup';//pe7u
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="all">
+    <div class="login-container">
+        <h1 id="form-heading" class="form-heading">Login</h1>
+        <div class="toggle-buttons">
+            <button id="signup-btn" onclick="toggleForm('signup')">Signup</button>
+            <button id="login-btn" class="active" onclick="toggleForm('login')">Login</button>
+        </div>
+        <div id="signup-form" style="display: none;">
+            <input type="email" class="input-box email2" placeholder="Email Address">
+            <input type="text" class="input-box name" placeholder="Create a Username">
+            <input type="password" class="input-box password2" placeholder="Create a Password">
+            <button class="btn signup" type="submit">Signup</button>
+            
+        </div>
+        <div id="login-form">
+            <input type="email" class="input-box email1" placeholder="Email Address">
+            <input type="password" class="input-box password1" placeholder="Password">
+            <button class="btn login" type="submit">Login</button>
+
+        </div>
+ 
+        <button class="google-btn"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo"> Sign up with Google</button>
+        <br>
+
+        <h6>©2025 @artistic.swayam</h6>
+    </div>
+    <br>
+    <h4>Signup to create an account</h4>
+</div>
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="index.js"></script>
+</body>
+</html>
