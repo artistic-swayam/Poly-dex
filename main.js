@@ -1,26 +1,52 @@
+//import firebase from "firebase/compat/app";
+const provider = new GoogleAuthProvider();
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import {
+    getAuth,
+    createUserWithEmailAndPassword ,
+    signInWithEmailAndPassword,
+    onAuthStateChanged  ,
+    updateProfile,
+    signOut,
+    signInWithPopup,
+    GoogleAuthProvider
+      } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+//
+const firebaseConfig = {//
+  apiKey: "AIzaSyC5FCzhbeocXFQTy3a7T8OOoT3Ya7QKy3s",
+  authDomain: "poly-dex.firebaseapp.com",
+  projectId: "poly-dex",
+  storageBucket: "poly-dex.firebasestorage.app",
+  messagingSenderId: "45959209468",
+  appId: "1:45959209468:web:cfccfd8da291634bf19279",
+  measurementId: "G-3D703KN4PE"
+};
+//w+reu8
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const user = auth.currentUser;//
+
+
+//variables
 const nav = document.querySelector(".nav");
 const menu = document.querySelector(".menu-btn");
 const close = document.querySelector(".close-btn");//+erh67//7889u9
 const navigator = document.querySelectorAll(".navigator");//e
-
 const addBtn1 = document.querySelector(".add1");
 const addBtn2 = document.querySelector(".add2");
 const addBtn3 = document.querySelector(".add3");
-
 const notesContainer = document.querySelector(".notes-task-area");
 const originalNote = document.querySelector(".notes");
 const originalTask = document.querySelector(".task");
 const originalJournal = document.querySelector(".journal");
 const hero = document.querySelector("h1");
+const info = document.querySelector("h4");
 
-//page shiftsh6
+//page shifts
 const notes_pg_btn = document.querySelector("#notes_bt");
 const tasks_pg_btn = document.querySelector("#tasks_bt");
 const journal_pg_btn = document.querySelector("#journal_bt");
 const account_pg_btn = document.querySelector("#account_bt");
-
-
-
 const notes_all = document.querySelector("#notes_all");
 const tasks_all = document.querySelector("#tasks_all");
 const journal_all = document.querySelector("#journal_all");
@@ -283,12 +309,6 @@ searchInput.addEventListener('input', function() {
     });
 });
 
-
-
-
-
-
-
 function show(elem){
     elem.classList.remove("none");
 }
@@ -317,6 +337,7 @@ notes_pg_btn.addEventListener("click",()=>{
     remove(account_all);
     hero.innerText = notes_pg_btn.textContent;
     hero.style.lineHeight = "1";
+    info.innerText = "";
 })
 tasks_pg_btn.addEventListener("click",()=>{
     console.log("clicked");
@@ -330,6 +351,7 @@ tasks_pg_btn.addEventListener("click",()=>{
     remove(account_all);
     hero.innerText = tasks_pg_btn.textContent;
     hero.style.lineHeight = "1";
+    info.innerText = "";
 })
 journal_pg_btn.addEventListener("click",()=>{
     console.log("clicked");
@@ -343,6 +365,7 @@ journal_pg_btn.addEventListener("click",()=>{
     remove(account_all);
     hero.innerText = journal_pg_btn.textContent;
     hero.style.lineHeight = "1";
+    info.innerText = "";
 })
 account_pg_btn.addEventListener("click",()=>{
     console.log("clicked");
@@ -350,5 +373,50 @@ account_pg_btn.addEventListener("click",()=>{
     remove(tasks_all);
     remove(journal_all);
     show(account_all);
+    hero.innerText = "User"+account_pg_btn.textContent;
+    hero.style.lineHeight = "1";
+    info.innerText = "";
 })
-// dede7pi+9eurpuw7p9e979wu8uiup+ewpe+u7p+7ue7p97++9ru+r
+
+
+// Firebase
+
+
+//fetch acc data
+
+onAuthStateChanged(auth,(user) => {
+    if (user) {
+      updateUserProfile(user);
+      const uid = user.uid;
+      return uid;
+      console.log("User is signed in");
+    } else {
+      console.log("User is signed out");
+    }
+  });//
+function updateUserProfile(user) {
+    const userName = user.displayName || "User";
+    const userEmail = user.email || "No email provided";
+    document.querySelector(".userName").textContent = userName;
+    document.querySelector(".userEmail").textContent = userEmail;
+  }
+  
+// Logout function
+document.querySelector(".logOutBtn").addEventListener("click", () => {
+    signOut(auth).then(() => {
+        console.log("User signed out");      
+        window.location.href = "index.html";
+    }).catch((error) => {
+        console.error("Error signing out:", error.message);
+    });
+});
+//notes db
+function read(){
+    const noteT = document.querySelector(".noteT").value;
+    const noteC = document.querySelector(".noteC").value;
+    const taskT = document.querySelector(".taskT").value;
+    const taskC = document.querySelector(".taskC").value;
+    const journalT = document.querySelector(".journalT").value;
+    const journalC = document.querySelector(".journalC").value;
+}
+read();
