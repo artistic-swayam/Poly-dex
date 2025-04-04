@@ -9,9 +9,20 @@ import {
     updateProfile,
     signOut,
     signInWithPopup,
-    GoogleAuthProvider
+    GoogleAuthProvider,
       } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-//
+      import {
+        getFirestore,
+        collection,
+        addDoc,
+        getDocs,
+        doc,
+        updateDoc,
+        deleteDoc
+      } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
+
+
 const firebaseConfig = {//
   apiKey: "AIzaSyC5FCzhbeocXFQTy3a7T8OOoT3Ya7QKy3s",
   authDomain: "poly-dex.firebaseapp.com",
@@ -25,6 +36,7 @@ const firebaseConfig = {//
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const user = auth.currentUser;//
+const db = getFirestore(app);
 
 
 //variables
@@ -68,6 +80,8 @@ function navClose() {
     tl.to(nav, { top: "-100%", duration: 0.5, ease: "expo.in" });
 }
 
+
+let editingNoteId = null;
 // Note Classepr99pr
 class Note {
     constructor(clone = false) {
@@ -108,15 +122,37 @@ class Note {
         this.nameInput.classList.remove("none");
         this.contentInput.classList.remove("none");
         this.saveBtn.classList.remove("none");
+        let editingNoteId = this.element.doc.id;
+        console.log(editingNoteId);
     }
 
-    save() {
+    async save() {
         this.preview.textContent = this.nameInput.value || "Untitled Note";
         this.preview.classList.remove("none");
         this.nameInput.classList.add("none");
         this.contentInput.classList.add("none");
         this.saveBtn.classList.add("none");
-        notes_all.querySelector("h3").innerText="'Double Click to edit'"
+        notes_all.querySelector("h3").innerText="'Double Click to edit'";
+        const notesRef = collection(db, "users", "userId_1", "notes");
+        const notesDocRef = doc(db, "users", "userId_1", "notes", editingNoteId)
+        if(!editingNoteId){
+            await addDoc(notesRef, {
+                title: this.nameInput.value || "Untitled Note",
+                content: this.contentInput.value || "",
+                
+              }).then(() => alert("Note saved!"))
+              .catch(error => console.error("Firestore Error:", error));
+              
+        }
+        if(editingNoteId){
+            await updateDoc(notesDocRef,{
+                title: this.nameInput.value || "Untitled Note",
+                content: this.contentInput.value || "",
+            }).then(() => alert("Note updated!"))
+            .catch(error => console.error("Firestore Error:", error));
+        }
+        editingNoteId=null;
+
     }
 
     delete() {
@@ -415,8 +451,9 @@ function read(){
     const noteT = document.querySelector(".noteT").value;
     const noteC = document.querySelector(".noteC").value;
     const taskT = document.querySelector(".taskT").value;
-    const taskC = document.querySelector(".taskC").value;
     const journalT = document.querySelector(".journalT").value;
     const journalC = document.querySelector(".journalC").value;
 }
 read();
+
+    
