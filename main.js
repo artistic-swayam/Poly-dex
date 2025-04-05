@@ -15,13 +15,14 @@ import {
         getFirestore,
         collection,
         addDoc,
+        getDoc,
         getDocs,
         doc,
+        setDoc,
         updateDoc,
-        deleteDoc
+        deleteDoc,
+        onSnapshot,
       } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
-
-
 
 const firebaseConfig = {//
   apiKey: "AIzaSyC5FCzhbeocXFQTy3a7T8OOoT3Ya7QKy3s",
@@ -37,6 +38,83 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const user = auth.currentUser;//
 const db = getFirestore(app);
+let currentId = null;
+
+// Firebase
+
+
+//fetch acc data
+
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      updateUserProfile(user);
+      currentId = user.uid;
+      const userRef = doc(db, "users", currentId);
+      console.log("Logged in as:", currentId);
+      try {
+        // Save basic user info
+        const docSnap = await getDoc(userRef);
+
+if (!docSnap.exists()) {
+  // First-time signup — set user profile and create subcollections
+  await setDoc(userRef, {
+    uid: currentId,
+    name: user.displayName || "User",
+    email: user.email || "No email provided",
+    createdAt: new Date()
+  });
+
+  console.log("✅ User profile created");
+  
+
+  const subcollections = ["notes", "tasks", "journals"];
+  for (let name of subcollections) {
+    const subColRef = collection(db, "users", currentId, name);
+    await addDoc(subColRef, {
+      init: true,
+      timestamp: new Date()
+    });
+  }
+
+  console.log("✅ Subcollections created");
+} else {
+  console.log("👀 User already exists, skipping setup");
+}
+  
+      } catch (error) {
+        console.error("Error during setup:", error.message);
+      }
+    } else {
+      console.log("User is signed out");
+    }
+  });
+  
+function updateUserProfile(user) {
+    const userName = user.displayName || "User";
+    const userEmail = user.email || "No email provided";
+    document.querySelector(".userName").textContent = userName;
+    document.querySelector(".userEmail").textContent = userEmail;
+  }
+  
+// Logout function
+document.querySelector(".logOutBtn").addEventListener("click", () => {
+    signOut(auth).then(() => {
+        console.log("User signed out");      
+        window.location.href = "index.html";
+    }).catch((error) => {
+        console.error("Error signing out:", error.message);
+    });
+});
+//notes db
+function read(){
+    const noteT = document.querySelector(".noteT").value;
+    const noteC = document.querySelector(".noteC").value;
+    const taskT = document.querySelector(".taskT").value;
+    const journalT = document.querySelector(".journalT").value;
+    const journalC = document.querySelector(".journalC").value;
+}
+read();
+
 
 
 //variables
@@ -81,8 +159,8 @@ function navClose() {
 }
 
 
-let editingNoteId = null;
-// Note Classepr99pr
+
+// Note Classepr99pr8+7PR
 class Note {
     constructor(clone = false) {
         this.element = clone ? this.createNewNote() : originalNote;
@@ -133,25 +211,17 @@ class Note {
         this.contentInput.classList.add("none");
         this.saveBtn.classList.add("none");
         notes_all.querySelector("h3").innerText="'Double Click to edit'";
-        const notesRef = collection(db, "users", "userId_1", "notes");
-        const notesDocRef = doc(db, "users", "userId_1", "notes", editingNoteId)
-        if(!editingNoteId){
+        const notesRef = collection(db, "users",currentId, "notes");
+        
+        
             await addDoc(notesRef, {
                 title: this.nameInput.value || "Untitled Note",
                 content: this.contentInput.value || "",
                 
               }).then(() => alert("Note saved!"))
               .catch(error => console.error("Firestore Error:", error));
+              //
               
-        }
-        if(editingNoteId){
-            await updateDoc(notesDocRef,{
-                title: this.nameInput.value || "Untitled Note",
-                content: this.contentInput.value || "",
-            }).then(() => alert("Note updated!"))
-            .catch(error => console.error("Firestore Error:", error));
-        }
-        editingNoteId=null;
 
     }
 
@@ -332,19 +402,19 @@ addBtn3.addEventListener("click", () => {
 //search feature
 const searchInput = document.querySelector('.search');
 
+// Update search to handle both notes and tasks
 searchInput.addEventListener('input', function() {
     const searchTerm = this.value.toLowerCase().trim();
-    const allNotes = document.querySelectorAll('.notes:not(.none)');
+    const allItems = document.querySelectorAll('.notes, .task');
     
-    allNotes.forEach(note => {
-        const noteName = note.querySelector('.notes-preview').textContent.toLowerCase();
-        const noteContent = note.querySelector('.notes-task-place').value.toLowerCase();
-        note.style.display = (noteName.includes(searchTerm) || noteContent.includes(searchTerm)) 
-                            ? 'block' 
-                            : 'none';
+    allItems.forEach(item => {
+        const name = item.querySelector('.notes-preview, .task-preview').textContent.toLowerCase();
+        const content = item.querySelector('.notes-task-place, .notes-task-name')?.value.toLowerCase() || '';
+        item.style.display = (name.includes(searchTerm) || content.includes(searchTerm)) 
+                           ? 'block' 
+                           : 'none';
     });
 });
-
 function show(elem){
     elem.classList.remove("none");
 }
@@ -413,47 +483,3 @@ account_pg_btn.addEventListener("click",()=>{
     hero.style.lineHeight = "1";
     info.innerText = "";
 })
-
-
-// Firebase
-
-
-//fetch acc data
-
-onAuthStateChanged(auth,(user) => {
-    if (user) {
-      updateUserProfile(user);
-      const uid = user.uid;
-      return uid;
-      console.log("User is signed in");
-    } else {
-      console.log("User is signed out");
-    }
-  });//
-function updateUserProfile(user) {
-    const userName = user.displayName || "User";
-    const userEmail = user.email || "No email provided";
-    document.querySelector(".userName").textContent = userName;
-    document.querySelector(".userEmail").textContent = userEmail;
-  }
-  
-// Logout function
-document.querySelector(".logOutBtn").addEventListener("click", () => {
-    signOut(auth).then(() => {
-        console.log("User signed out");      
-        window.location.href = "index.html";
-    }).catch((error) => {
-        console.error("Error signing out:", error.message);
-    });
-});
-//notes db
-function read(){
-    const noteT = document.querySelector(".noteT").value;
-    const noteC = document.querySelector(".noteC").value;
-    const taskT = document.querySelector(".taskT").value;
-    const journalT = document.querySelector(".journalT").value;
-    const journalC = document.querySelector(".journalC").value;
-}
-read();
-
-    
