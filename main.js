@@ -43,68 +43,7 @@ let currentId = null;
 // Firebase
 
 
-//fetch acc data
 
-onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      updateUserProfile(user);
-      currentId = user.uid;
-      const userRef = doc(db, "users", currentId);
-      console.log("Logged in as:", currentId);
-      try {
-        // Save basic user info
-        const docSnap = await getDoc(userRef);
-
-if (!docSnap.exists()) {
-  // First-time signup — set user profile and create subcollections
-  await setDoc(userRef, {
-    uid: currentId,
-    name: user.displayName || "User",
-    email: user.email || "No email provided",
-    createdAt: new Date()
-  });
-
-  console.log("✅ User profile created");
-  
-
-  const subcollections = ["notes", "tasks", "journals"];
-  for (let name of subcollections) {
-    const subColRef = collection(db, "users", currentId, name);
-    await addDoc(subColRef, {
-      init: true,
-      timestamp: new Date()
-    });
-  }
-
-  console.log("✅ Subcollections created");
-} else {
-  console.log("👀 User already exists, skipping setup");
-}
-  
-      } catch (error) {
-        console.error("Error during setup:", error.message);
-      }
-    } else {
-      console.log("User is signed out");
-    }
-  });
-  
-function updateUserProfile(user) {
-    const userName = user.displayName || "User";
-    const userEmail = user.email || "No email provided";
-    document.querySelector(".userName").textContent = userName;
-    document.querySelector(".userEmail").textContent = userEmail;
-  }
-  
-// Logout function
-document.querySelector(".logOutBtn").addEventListener("click", () => {
-    signOut(auth).then(() => {
-        console.log("User signed out");      
-        window.location.href = "index.html";
-    }).catch((error) => {
-        console.error("Error signing out:", error.message);
-    });
-});
 //notes db
 function read(){
     const noteT = document.querySelector(".noteT").value;
@@ -162,19 +101,22 @@ function navClose() {
 
 // Note Classepr99pr8+7PR
 class Note {
-    constructor(clone = false) {
+    constructor(clone = false, docId = null) {
         this.element = clone ? this.createNewNote() : originalNote;
         this.preview = this.element.querySelector(".notes-preview");
         this.nameInput = this.element.querySelector(".notes-task-name");
         this.contentInput = this.element.querySelector(".notes-task-place");
         this.saveBtn = this.element.querySelector(".save-btn");
         this.deleteBtn = this.element.querySelector(".delete-btn");//
+        this.docId = docId;
+        this.element.setAttribute("data-id", docId);//
         this.initialize();
     }
 
     createNewNote() {//wp0u7re
         
         const newNote = document.createElement('div');
+        //
         newNote.className = 'notes';
         newNote.innerHTML = `
             <h3 class="notes-preview none">Name</h3>
@@ -200,8 +142,7 @@ class Note {
         this.nameInput.classList.remove("none");
         this.contentInput.classList.remove("none");
         this.saveBtn.classList.remove("none");
-        let editingNoteId = this.element.doc.id;
-        console.log(editingNoteId);
+        
     }
 
     async save() {
@@ -210,20 +151,35 @@ class Note {
         this.nameInput.classList.add("none");
         this.contentInput.classList.add("none");
         this.saveBtn.classList.add("none");
-        notes_all.querySelector("h3").innerText="'Double Click to edit'";
-        const notesRef = collection(db, "users",currentId, "notes");
-        
-        
-            await addDoc(notesRef, {
-                title: this.nameInput.value || "Untitled Note",
-                content: this.contentInput.value || "",
-                
-              }).then(() => alert("Note saved!"))
-              .catch(error => console.error("Firestore Error:", error));
-              //
-              
-
+        notes_all.querySelector("h3").innerText = "'Double Click to edit'";
+    
+        const noteId = this.element.getAttribute("data-id");
+        const notesRef = collection(db, "users", currentId, "notes");
+        const noteData = {
+            title: this.nameInput.value || "Untitled Note",
+            content: this.contentInput.value || ""
+        };
+    
+        if (!noteId || noteId === "null" || noteId === "undefined") {
+            try {
+                const docRef = await addDoc(notesRef, noteData);
+                this.docId = docRef.id;
+                this.element.setAttribute("data-id", docRef.id); // 🔥 THIS LINE FIXES IT
+                console.log("✅ New note saved with ID:", docRef.id);
+            } catch (error) {
+                console.error("❌ Firestore Error:", error);
+            }
+        } else {
+            try {
+                const docRef = doc(notesRef, noteId);
+                await updateDoc(docRef, noteData);
+                console.log("🔄 Note updated with ID:", noteId);
+            } catch (error) {
+                console.error("❌ Update error:", error);
+            }
+        }
     }
+    
 
     delete() {
         this.element.remove();
@@ -234,15 +190,19 @@ class Note {
         this.style.height = this.scrollHeight + "px";
     }
 }
+
 //Task class
 class Task{
     
-        constructor(clone = false) {
+        constructor(clone = false, docId = null) {
             this.element = clone ? this.createNewTask() : originalTask;//9u+ee+r
             this.preview = this.element.querySelector(".notes-preview");
             this.nameInput = this.element.querySelector(".notes-task-name");//rerppe8upwpr9pu+ppu
+            this.saveBtn = this.element.querySelector(".save-btn");
             this.deleteBtn = this.element.querySelector(".delete-btn");
             this.doneBtn = this.element.querySelector(".check");
+            this.docId = docId;
+            this.element.setAttribute("data-id", docId);//
             this.initialize();
         }
 
@@ -258,12 +218,14 @@ class Task{
 					  <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path"></path>
 					</svg>
 				</label>
-                <h3 class="notes-preview none">Name</h3>
-				<input type="text" class="notes-task-name" placeholder="Add task"></input>
+				<h3 class="notes-preview none">Name</h3>
+				<input type="text" class="notes-task-name taskT" placeholder="Add task"></input>
 			</div>
 			<div class="icons">
-
+				
 				<i class="ri-delete-bin-6-line delete-btn"></i>
+				<button class="save-btn"><h4>save</h4></button>
+				<!-- <button class="save-btn"><h4>save</h4></button>+++rw7u wee3'0pepr++8peprw9rrr-->
 			</div>
         `;
         return newTask;
@@ -271,13 +233,13 @@ class Task{
     initialize() {
         this.element.addEventListener("dblclick", () => this.expand());//
         this.deleteBtn.addEventListener("click", () => this.delete());//
+        this.saveBtn.addEventListener("click", () => this.save());
         this.doneBtn.addEventListener("change", (e) => {
             if (e.target.checked) {
                 console.log("Task completed!");
                 // You can also apply styling (e.g., strike-through)
                 this.preview.style.textDecoration = "line-through";
                 this.nameInput.style.textDecoration = "line-through";
-                this.save();
             } else {
                 console.log("Task unchecked!");
                 this.preview.style.textDecoration = "none";
@@ -289,13 +251,40 @@ class Task{
     expand() {
         this.preview.classList.add("none");
         this.nameInput.classList.remove("none");//
+        this.saveBtn.classList.remove("none");
     }
 
-    save() {
-        this.preview.textContent = this.nameInput.value || "Untitled Task";//
+    async save() {
+        this.preview.textContent = this.nameInput.value || "Untitled Note";
         this.preview.classList.remove("none");
-        this.nameInput.classList.add("none");//
-        tasks_all.querySelector("h3").innerText="'Double Click to edit'"//wp
+        this.nameInput.classList.add("none");
+        this.saveBtn.classList.add("none");
+        tasks_all.querySelector("h3").innerText = "'Double Click to edit'";
+
+        const taskId = this.element.getAttribute("data-id");
+        const tasksRef = collection(db, "users", currentId, "tasks");
+        const taskData = {
+            title: this.nameInput.value || "Untitled Note",
+        };
+    
+        if (!taskId || taskId === "null" || taskId === "undefined") {
+            try {
+                const docRef = await addDoc(tasksRef, taskData);
+                this.docId = docRef.id;
+                this.element.setAttribute("data-id", docRef.id); // 🔥 THIS LINE FIXES IT
+                console.log("✅ New task saved with ID:", docRef.id);
+            } catch (error) {
+                console.error("❌ Firestore Error:", error);
+            }
+        } else {
+            try {
+                const docRef = doc(tasksRef, taskId);
+                await updateDoc(docRef, taskData);
+                console.log("🔄 task updated with ID:", taskId);
+            } catch (error) {
+                console.error("❌ Update error:", error);
+            }
+        }
     }
 
     delete() {
@@ -363,7 +352,102 @@ class Journal{
     }
 }
 
+//fetch acc data
 
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      updateUserProfile(user);
+      currentId = user.uid;
+      const userRef = doc(db, "users", currentId);
+      const notesRef = collection(db, "users", currentId, "notes");
+      const tasksRef = collection(db, "users", currentId, "tasks");
+      console.log("Logged in as:", currentId);
+      
+      //load user data
+      const querySnapshot = await getDocs(notesRef);
+      querySnapshot.forEach((doc) => {
+        notes_all.querySelector("h3").innerText="'Double Click to edit'";//
+        tasks_all.querySelector("h3").innerText="'Double Click to edit'";//
+      console.log(doc.id, "=>", doc.data());
+      const noteData = doc.data();//+9P9P
+      const taskData = doc.data();
+      const newNote = new Note(true, doc.id);
+      const newTask = new Task(true, doc.id);
+
+
+      newNote.nameInput.value = noteData.title || "Untitled Note";
+      newNote.contentInput.value = noteData.content || "";
+      newNote.preview.textContent = noteData.title || "Untitled Note";
+      newNote.preview.classList.remove("none");
+      newNote.nameInput.classList.add("none");
+      newNote.contentInput.classList.add("none");
+      newNote.saveBtn.classList.add("none");//
+      notes_all.appendChild(newNote.element);   
+    });
+    const tasksSnapshot = await getDocs(tasksRef);
+    tasksSnapshot.forEach((doc) => {
+        const taskData = doc.data();
+        const newTask = new Task(true, doc.id);
+      
+        newTask.nameInput.value = taskData.title || "Untitled Task";
+        newTask.preview.textContent = taskData.title || "Untitled Task";
+        newTask.preview.classList.remove("none");
+        newTask.nameInput.classList.add("none");
+        newTask.saveBtn.classList.add("none");
+        tasks_all.appendChild(newTask.element);
+      });
+
+
+      try {
+        // Save basic user info
+        const docSnap = await getDoc(userRef);
+        if (!docSnap.exists()) {
+            // First-time signup — set user profile and create subcollections
+            await setDoc(userRef, {
+              uid: currentId,
+              name: user.displayName || "User",
+              email: user.email || "No email provided",
+              createdAt: new Date()
+            });
+          
+            console.log("✅ User profile created");
+            const subcollections = ["notes", "tasks", "journals"];
+            for (let name of subcollections) {
+                const subColRef = collection(db, "users", currentId, name);
+                await addDoc(subColRef, {
+                  init: true,
+                  timestamp: new Date()
+                });
+              }
+              console.log("✅ Subcollections created");
+            } else {
+                console.log("👀 User already exists, skipping setup");
+            }
+  
+      } catch (error) {
+        console.error("Error during setup:", error.message);
+      }
+    } else {
+      console.log("User is signed out");
+    }
+  });
+  
+function updateUserProfile(user) {
+    const userName = user.displayName || "User";
+    const userEmail = user.email || "No email provided";
+    document.querySelector(".userName").textContent = userName;
+    document.querySelector(".userEmail").textContent = userEmail;
+  }
+  
+// Logout function
+document.querySelector(".logOutBtn").addEventListener("click", () => {
+    signOut(auth).then(() => {
+        console.log("User signed out");      
+        window.location.href = "index.html";
+    }).catch((error) => {
+        console.error("Error signing out:", error.message);
+    });
+});
 
 // Initialize original note
 const mainNote = new Note();
@@ -483,3 +567,8 @@ account_pg_btn.addEventListener("click",()=>{
     hero.style.lineHeight = "1";
     info.innerText = "";
 })
+//
+
+
+
+    
