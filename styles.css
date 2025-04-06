@@ -300,6 +300,9 @@ textarea:focus{
 .text{
     margin: 0 auto;
 }
+h5{
+    color: whitesmoke;
+}
 h4,h3,li,p{
     font-family: 'SF Pro Display';
 }
