@@ -1,144 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
-	<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap');
+        @font-face {
+    font-family: 'SF Pro Display';
+    src: url('SFPRODISPLAYBOLD.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
 
-	<link
-    href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
-    rel="stylesheet"/>
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Lora', serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: whitesmoke;
+        }
+        .all{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .login-container {
+            background: rgb(31, 31, 31);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            color: whitesmoke;
+            width: 300px;
+        }
+        .input-box {
+            font-family: 'SF Pro Display';
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: whitesmoke;
+        }
+        .input-box:focus {
+            outline: none;
+            border: 2px solid whitesmoke;
+        }
+        .btn {
+            width: 100%;
+            padding: 10px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 8px;
+            background-color: whitesmoke;
+            color: rgb(31, 31, 31);
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background-color: rgb(200, 200, 200);
+        }
+        .forgot-password {
+            display: block;
+            margin-top: 10px;
+            font-family: 'SF Pro Display';/* u */
+            text-decoration: none;
+            color: whitesmoke;
+            font-size: 14px;
+        }
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+        .toggle-buttons {
+            display: flex;
+            
+            justify-content: space-between;
+            margin-bottom: 15px;
+            border-radius: 20px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px;
+        }
+        .toggle-buttons button {
+            flex: 1;
+            padding: 10px;
+            font-family: 'SF Pro Display';
+            border: none;
+            background: transparent;
+            color: whitesmoke;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            border-radius: 15px;
+        }
+        .toggle-buttons button.active {
+            background: whitesmoke;
+            color: rgb(31, 31, 31);
+        }
+        .form-heading {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .google-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 8px;
+            background-color: black;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .google-btn:hover {
+            background-color: #222;
+        }
+        .google-btn img {
+            width: 20px;
+            height: 20px;
+        }
+        h6,h4,p{
+            font-family: 'SF Pro Display';
+        }
+        ::placeholder {
+    color: whitesmoke; /* Darker color */
+    opacity: 1; /* Full visibility */
+}
+    </style>
+    <script>
+        function toggleForm(formType) {
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+            const loginButton = document.getElementById('login-btn');
+            const signupButton = document.getElementById('signup-btn');
+            const formHeading = document.getElementById('form-heading');
+
+            if (formType === 'login') {
+                loginForm.style.display = 'block';
+                signupForm.style.display = 'none';
+                loginButton.classList.add('active');
+                signupButton.classList.remove('active');
+                
+            } else {
+                loginForm.style.display = 'none';
+                signupForm.style.display = 'block';
+                signupButton.classList.add('active');
+                loginButton.classList.remove('active');
+                //pe7u
+            }
+        }
+    </script>
 </head>
 <body>
-	<div class="all">
-		
-	<div class="nav">
-		<h2>Menu</h2>
-		<ul>
-			<li id="notes_bt" class="navigator"><a href="#notes_all">Notes</a></li>
-			<li id="tasks_bt" class="navigator"><a href="#tasks_all">Tasks</a></li>
-			<li id="journal_bt" class="navigator"><a href="#journal_all">Journals</a></li>
-			<li id="account_bt" class="navigator"><a href="#account_all">Account</a></li>
-			
-		</ul>
-		
-		<i class="ri-close-line close-btn"></i>
-	</div>
-	<div class="main">
-		<div class="top">
-			<div class="head">
-				<h2>Polydex</h2>
-			</div>
-			<i class="ri-menu-2-line menu-btn"></i>
-			
-		</div>
-		<h1>"Write what you seek!"</h1>
-		<h4>click on menu bar and start writing</h4>
-		
-		<!-- notes page-->
-		<div class="notes-task-area none" id="notes_all">
-			
-			<h3></h3>
-			
-			<div class="notes none">
-				<h3 class="notes-preview none">Name</h3>
-				<input type="text" class="notes-task-name noteT" placeholder="Add name"></input>
-				<textarea name="" id="" class="notes-task-place noteC" placeholder="Type here..."></textarea>
-				<div class="icons">
-					<i class="ri-arrow-down-wide-line ex-btn none"></i>
-				    <i class="ri-delete-bin-6-line delete-btn"></i>
-					<button class="save-btn"><h4>save</h4></button>
-				</div>
-			</div>
-			
-			<i class="ri-add-circle-fill task-add add1"></i>
-		</div>
+    <div class="all">
+        <h1>Polydex</h1>
+        <h4>Signup to get started</h4>
+        <br>
+    <div class="login-container">
+        
+        <div class="toggle-buttons">
+            <button id="signup-btn" onclick="toggleForm('signup')">Signup</button>
+            <button id="login-btn" class="active" onclick="toggleForm('login')">Login</button>
+        </div>
+        <div id="signup-form" style="display: none;">
+            <input type="email" class="input-box email2" placeholder="Email Address">
+            <input type="text" class="input-box name" placeholder="Create a Username">
+            <input type="password" class="input-box password2" placeholder="Create a Password">
+            <button class="btn signup" type="submit">Signup</button>
+            
+        </div>
+        <div id="login-form">
+            <input type="email" class="input-box email1" placeholder="Email Address">
+            <input type="password" class="input-box password1" placeholder="Password">
+            <button class="btn login" type="submit">Login</button>
 
-		<!-- tasks page-->
-	    <div class="notes-task-area none" id="tasks_all">
-		<h3></h3>
+        </div>
+ 
+        <button class="google-btn"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo"> Continue with Google</button>
+        <br>
 
-		<div class="task">
-			
-			<div class="task-area">
-				<!-- From Uiverse.io by SelfMadeSystem '-.'-++9+r98rp'--> 
-				<label class="container">
-					<input type="checkbox" class="check">
-					<svg viewBox="0 0 64 64" height="1em" width="1em">
-					  <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path"></path>
-					</svg>
-				</label>
-				<h3 class="notes-preview none">Name</h3>
-				<input type="text" class="notes-task-name taskT" placeholder="Add task"></input>
-			</div>
-			<div class="icons">
-				
-				<i class="ri-delete-bin-6-line delete-btn"></i>
-				<button class="save-btn"><h4>save</h4></button>
-				<!-- <button class="save-btn"><h4>save</h4></button>+++rw7u wee3'0pepr++8peprw9rrr-->
-			</div>
-		</div>
-		
-		<i class="ri-add-circle-fill task-add add2 none"></i>
-	    </div>
-
-		<!-- journal page-->
-		<div class="notes-task-area none" id="journal_all">
-			<h3></h3>
-			<div class="journal">
-				<h3 class="notes-preview journalT"></h3>
-				<textarea name="" id="" class="notes-task-place journalC" placeholder="Type here..."></textarea>
-				<div class="icons">
-					<i class="ri-arrow-down-wide-line ex-btn none"></i>
-					<i class="ri-delete-bin-6-line delete-btn"></i>
-					<button class="save-btn"><h4>save</h4></button>
-				</div>
-		    </div>
-
-			
-			<i class="ri-add-circle-fill task-add add3 none"></i>
-		</div>
-
-		<!-- account page -->
-		<div class="notes-task-area none" id="account_all">
-			<div class="account-container">
-				<div class="info">
-					<label>Name</label>
-					<p class="userName">.....</p>
-					<label>Email</label>
-					<p class="userEmail">...........</p>
-					<label>Password</label>
-					<input type="password" value="password123" readonly class="userPassword"></input><!-- ew+w+w+97opu8ru9p897+uere+w+99 -->
-				</div>
-				<button class="btn logOutBtn">Log Out</button>
-				<h5>©2025 @artistic.swayam</h5>
-			</div>
-			
-		</div>
-
-		<div class="bottom">
-			<input type="text" class="search" placeholder="search for saved items"><i class="ri-search-2-line"></i></input>
-		</div>
-		
-		
-	</div>
-
-
-	</div>
-
-	
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-	<script type="module" src="firebase-config.js"></script>
-		
-	
-
-	<script type="module" src="main.js"></script>
+        <h6>©2025 @artistic.swayam</h6>
+    </div>
+    <br>
+    
 </div>
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="index.js"></script>
 </body>
 </html>
-
-
