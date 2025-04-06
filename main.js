@@ -1,4 +1,4 @@
-//import firebase from "firebase/compat/app";
+//import firebase
 const provider = new GoogleAuthProvider();
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import {
@@ -33,27 +33,56 @@ const firebaseConfig = {//
   appId: "1:45959209468:web:cfccfd8da291634bf19279",
   measurementId: "G-3D703KN4PE"
 };
-//w+reu8
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const user = auth.currentUser;//
 const db = getFirestore(app);
-let currentId = null;
 
-// Firebase
+const noteT = document.querySelector(".noteT").value;    
+const noteC = document.querySelector(".noteC").value;
+const taskT = document.querySelector(".taskT").value;
+const journalT = document.querySelector(".journalT");
+const journalC = document.querySelector(".journalC").value;
 
 
+//fetch date
+let currentId = null;const currentDate = new Date();
+const options = { day: 'numeric', month: 'long', year: 'numeric' };
+const formattedDate = currentDate.toLocaleDateString('en-GB', options);
+journalT.innerText = formattedDate;
+console.log(formattedDate);
 
-//notes db
-function read(){
-    const noteT = document.querySelector(".noteT").value;
-    const noteC = document.querySelector(".noteC").value;
-    const taskT = document.querySelector(".taskT").value;
-    const journalT = document.querySelector(".journalT").value;
-    const journalC = document.querySelector(".journalC").value;
-}
-read();
 
+//deletions
+async function deleteNoteFromFirestore(noteId) {
+    try {
+      const docRef = doc(db, "users", currentId, "notes", noteId);
+      await deleteDoc(docRef);
+      console.log("🗑️ Note deleted:", noteId);
+    } catch (err) {
+      console.error("❌ Failed to delete note:", err);
+    }
+  }
+  
+  async function deleteTaskFromFirestore(taskId) {
+    try {
+      const docRef = doc(db, "users", currentId, "tasks", taskId);
+      await deleteDoc(docRef);
+      console.log("🗑️ Task deleted:", taskId);
+    } catch (err) {
+      console.error("❌ Failed to delete task:", err);
+    }
+  }
+  
+  async function deleteJournalFromFirestore(journalId) {
+    try {
+      const docRef = doc(db, "users", currentId, "journals", journalId);
+      await deleteDoc(docRef);
+      console.log("🗑️ Journal deleted:", journalId);
+    } catch (err) {
+      console.error("❌ Failed to delete journal:", err);
+    }
+  }
 
 
 //variables
@@ -80,11 +109,9 @@ const notes_all = document.querySelector("#notes_all");
 const tasks_all = document.querySelector("#tasks_all");
 const journal_all = document.querySelector("#journal_all");
 const account_all = document.querySelector("#account_all");
-
-
 const tl = gsap.timeline();
 
-// Navigation animationspw9+u9u8uewp+99+p7898e99
+// Navigation animations
 nav.addEventListener("click", () => navClose());//
 menu.addEventListener("click", () => navShow());
 close.addEventListener("click", () => navClose());
@@ -92,14 +119,11 @@ close.addEventListener("click", () => navClose());
 function navShow() {
     tl.to(nav, { top: 0, duration: 0.5, ease: "expo.out" });
 }
-
 function navClose() {
     tl.to(nav, { top: "-100%", duration: 0.5, ease: "expo.in" });
 }
 
-
-
-// Note Classepr99pr8+7PR
+// Note Class
 class Note {
     constructor(clone = false, docId = null) {
         this.element = clone ? this.createNewNote() : originalNote;
@@ -113,7 +137,7 @@ class Note {
         this.initialize();
     }
 
-    createNewNote() {//wp0u7re
+    createNewNote() {
         
         const newNote = document.createElement('div');
         //
@@ -179,10 +203,9 @@ class Note {
             }
         }
     }
-    
-
     delete() {
         this.element.remove();
+        if (this.docId) deleteNoteFromFirestore(this.docId)
     }
 
     autoResize() {
@@ -200,18 +223,16 @@ class Task{
             this.nameInput = this.element.querySelector(".notes-task-name");//rerppe8upwpr9pu+ppu
             this.saveBtn = this.element.querySelector(".save-btn");
             this.deleteBtn = this.element.querySelector(".delete-btn");
-            this.doneBtn = this.element.querySelector(".check");
+            this.checkbox = this.element.querySelector(".check");
             this.docId = docId;
             this.element.setAttribute("data-id", docId);//
             this.initialize();
         }
-
         createNewTask() {
         const newTask = document.createElement('div');
         newTask.className = 'task';//
         newTask.innerHTML = `
 			<div class="task-area">
-				<!-- From Uiverse.io by SelfMadeSystem '-.'-++9+r98rp'--> 
 				<label class="container">
 					<input type="checkbox" class="check">
 					<svg viewBox="0 0 64 64" height="1em" width="1em">
@@ -234,7 +255,7 @@ class Task{
         this.element.addEventListener("dblclick", () => this.expand());//
         this.deleteBtn.addEventListener("click", () => this.delete());//
         this.saveBtn.addEventListener("click", () => this.save());
-        this.doneBtn.addEventListener("change", (e) => {
+        this.checkbox.addEventListener("change", (e) => {
             if (e.target.checked) {
                 console.log("Task completed!");
                 // You can also apply styling (e.g., strike-through)
@@ -269,7 +290,7 @@ class Task{
     
         if (!taskId || taskId === "null" || taskId === "undefined") {
             try {
-                const docRef = await addDoc(tasksRef, taskData);
+                const docRef = await addDoc(tasksRef, taskData);//e
                 this.docId = docRef.id;
                 this.element.setAttribute("data-id", docRef.id); // 🔥 THIS LINE FIXES IT
                 console.log("✅ New task saved with ID:", docRef.id);
@@ -282,13 +303,14 @@ class Task{
                 await updateDoc(docRef, taskData);
                 console.log("🔄 task updated with ID:", taskId);
             } catch (error) {
-                console.error("❌ Update error:", error);
+                console.log("❌ Update error:", error);
             }
         }
     }
 
     delete() {
         this.element.remove();
+        if (this.docId) deleteTaskFromFirestore(this.docId)
     }
 
     autoResize() {
@@ -300,12 +322,14 @@ class Task{
 //Journal class
 class Journal{
     
-    constructor(clone = false) {
+    constructor(clone = false, docId = null) {
             this.element = clone ? this.createNewJournal() : originalJournal;//9u+ee+r
             this.preview = this.element.querySelector(".notes-preview");//rerppe8upwpr9pu+ppu
             this.deleteBtn = this.element.querySelector(".delete-btn");
             this.contentInput = this.element.querySelector(".notes-task-place");
             this.saveBtn = this.element.querySelector(".save-btn");
+            this.docId = docId;
+            this.element.setAttribute("data-id", docId);//
             this.initialize();
         }
 
@@ -313,8 +337,8 @@ class Journal{
         const newJournal = document.createElement('div');
         newJournal.className = 'journal';//
         newJournal.innerHTML = `
-			<h3 class="notes-preview">1st jan,2025</h3>
-				<textarea name="" id="" class="notes-task-place" placeholder="Type here..."></textarea>
+			<h3 class="notes-preview journalT">${formattedDate}</h3>
+				<textarea name="" id="" class="notes-task-place journalC" placeholder="Type here..."></textarea>
 				<div class="icons">
 					<i class="ri-arrow-down-wide-line ex-btn none"></i>
 					<i class="ri-delete-bin-6-line delete-btn"></i>
@@ -334,18 +358,43 @@ class Journal{
         this.contentInput.classList.remove("none");
         this.saveBtn.classList.remove("none");
     }
-
-    save() {
+    async save() {
         //this.preview.textContent = this.nameInput.value || "Untitled Task";
         this.contentInput.classList.add("none");//
         this.saveBtn.classList.add("none");
         journal_all.querySelector("h3").innerText="'Double Click to edit'"//wp
-    }
 
+        const journalId = this.element.getAttribute("data-id");
+        const journalsRef = collection(db, "users", currentId, "journals");
+        const journalData = {
+            title: formattedDate || "Untitled journal",
+            content: this.contentInput.value || ""
+        };
+    
+        if (!journalId || journalId === "null" || journalId === "undefined") {
+            try {
+                const docRef = await addDoc(journalsRef, journalData);
+                this.docId = docRef.id;
+                this.element.setAttribute("data-id", docRef.id); // 🔥 THIS LINE FIXES IT
+                console.log("✅ New journal saved with ID:", docRef.id);
+            } catch (error) {
+                console.error("❌ Firestore Error:", error);
+            }
+        } else {
+            try {
+                const docRef = doc(journalsRef, journalId);
+                await updateDoc(docRef, journalData);
+                console.log("🔄 journal updated with ID:", journalId);
+            } catch (error) {
+                console.error("❌ Update error:", error);
+            }
+        }
+    }
     delete() {
         this.element.remove();
+        console.log("Deleting journal with ID:", this.docId);
+        if (this.docId) deleteJournalFromFirestore(this.docId)
     }
-
     autoResize() {
         this.style.height = "auto";
         this.style.height = this.scrollHeight + "px";
@@ -353,7 +402,6 @@ class Journal{
 }
 
 //fetch acc data
-
 onAuthStateChanged(auth, async (user) => {
     if (user) {
       updateUserProfile(user);
@@ -361,6 +409,7 @@ onAuthStateChanged(auth, async (user) => {
       const userRef = doc(db, "users", currentId);
       const notesRef = collection(db, "users", currentId, "notes");
       const tasksRef = collection(db, "users", currentId, "tasks");
+      const journalsRef = collection(db, "users", currentId, "journals");
       console.log("Logged in as:", currentId);
       
       //load user data
@@ -368,11 +417,11 @@ onAuthStateChanged(auth, async (user) => {
       querySnapshot.forEach((doc) => {
         notes_all.querySelector("h3").innerText="'Double Click to edit'";//
         tasks_all.querySelector("h3").innerText="'Double Click to edit'";//
+        journal_all.querySelector("h3").innerText="'Double Click to edit'";//
       console.log(doc.id, "=>", doc.data());
       const noteData = doc.data();//+9P9P
-      const taskData = doc.data();
       const newNote = new Note(true, doc.id);
-      const newTask = new Task(true, doc.id);
+
 
 
       newNote.nameInput.value = noteData.title || "Untitled Note";
@@ -391,10 +440,40 @@ onAuthStateChanged(auth, async (user) => {
       
         newTask.nameInput.value = taskData.title || "Untitled Task";
         newTask.preview.textContent = taskData.title || "Untitled Task";
+        if (taskData.completed) {
+            newTask.checkbox.checked = true;
+          }
         newTask.preview.classList.remove("none");
         newTask.nameInput.classList.add("none");
         newTask.saveBtn.classList.add("none");
-        tasks_all.appendChild(newTask.element);
+        
+
+
+        newTask.checkbox.addEventListener("change", async () => {
+            try {
+              await updateDoc(doc(db, "users", currentId, "tasks", doc.id), {
+                completed: newTask.checkbox.checked,
+              });
+              console.log("✅ Task completion status updated");
+            } catch (err) {
+              console.error("❌ Failed to update task:", err.message);
+            }
+          });//  
+          tasks_all.appendChild(newTask.element);
+      });
+      const journalsSnapshot = await getDocs(journalsRef);
+      journalsSnapshot.forEach((doc) => {
+        const journalData = doc.data();
+        const newJournal = new Journal(true, doc.id);
+      
+        newJournal.preview.textContent = formattedDate;
+        if (journalData.completed) {
+            newJournal.checkbox.checked = true;
+          }
+        newJournal.preview.classList.remove("none");
+        newJournal.saveBtn.classList.add("none");
+    
+        journal_all.appendChild(newJournal.element);
       });
 
 
@@ -416,6 +495,7 @@ onAuthStateChanged(auth, async (user) => {
                 const subColRef = collection(db, "users", currentId, name);
                 await addDoc(subColRef, {
                   init: true,
+                  completed: false,
                   timestamp: new Date()
                 });
               }
@@ -473,16 +553,6 @@ addBtn3.addEventListener("click", () => {
     newJournal.expand();
 });
 
-
-// Textarea Auto-resize
-// document.querySelectorAll('textarea').forEach(textarea => {
-//     textarea.addEventListener('input', function() {
-//         this.style.height = "auto";
-//         this.style.height = this.scrollHeight + "px";
-//     });
-// });
-
-
 //search feature
 const searchInput = document.querySelector('.search');
 
@@ -510,14 +580,11 @@ let current_pg = "";
 document.querySelectorAll(".navigator").forEach(btn=>{
     btn.addEventListener("click",(e)=>{
         e.preventDefault();
-        console.log("prevent");
         current_pg= e.target.textContent.trim();
-        console.log(current_pg);
     })
 })
 
 notes_pg_btn.addEventListener("click",()=>{
-    console.log("clicked");
     show(addBtn1);
     remove(addBtn2);
     remove(addBtn3);  
@@ -530,11 +597,9 @@ notes_pg_btn.addEventListener("click",()=>{
     info.innerText = "";
 })
 tasks_pg_btn.addEventListener("click",()=>{
-    console.log("clicked");
     remove(addBtn1);
     show(addBtn2);
     remove(addBtn3); 
-
     remove(notes_all);
     show(tasks_all);
     remove(journal_all);
@@ -544,11 +609,9 @@ tasks_pg_btn.addEventListener("click",()=>{
     info.innerText = "";
 })
 journal_pg_btn.addEventListener("click",()=>{
-    console.log("clicked");
     remove(addBtn1);
     remove(addBtn2);
     show(addBtn3); 
-
     remove(notes_all);
     remove(tasks_all);
     show(journal_all);
@@ -558,7 +621,6 @@ journal_pg_btn.addEventListener("click",()=>{
     info.innerText = "";
 })
 account_pg_btn.addEventListener("click",()=>{
-    console.log("clicked");
     remove(notes_all);
     remove(tasks_all);
     remove(journal_all);
